@@ -178,29 +178,37 @@ function addRoles() {
 function updateEmployeeRole () {
     //find all employees
     matrix.query('SELECT * FROM employee', (err, data) =>{
-        console.log(data)
+        console.table(data)
         inquirer.prompt([{
-            type: 'input',
+            type: 'list',
             name: 'whichEmployee',
             message: "What employee's role would you like to update?",
-            
-    }])
-    .then(
+            choices: data.map(employee => {
+
+            }),
+          }])
+    .then(answer => {
     //which new role do you want to assign
     matrix.query('SELECT * FROM role', (err, data) =>{
-        console.log(data)
+        console.table(data)
         inquirer.prompt([{
             type: 'list',
             name: 'updateEmRole',
             message: "which new role do you want to assign?",
-            choices: ''
-        }])
+            choices: data.map(role => {
+
+            })
+          }])
+          .then(secondAnswer => {
+            // Here is where you use "answer" and "secondAnswer" to update the employee role in the database
+         })
+        
     })
-)
+  
 
 
-})};
-
+})}
+)}
 
 
 prompt();
