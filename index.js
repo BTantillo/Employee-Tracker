@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 const matrix = require('./db/connection')
 
+
 function prompt () {
     console.log(`
     ======================
@@ -15,7 +16,7 @@ inquirer.prompt([
         name: 'mainmenu',
         message: 'Please choose one of the options:',
         choices: ['View All Departments', 'View All Roles', 'View All Employees', 'View Employees by Manager', 'View Employees by Deparment',
-                    'Add a Role', 'Add an Employee','Update an Employee Role','Update Employee Manager', 'Exit']
+                    'Add a Role', 'Add an Employee','Update Employee Role', 'Exit']
     }
 ]).then(function (data) {
     switch (data.mainmenu) {
@@ -50,10 +51,6 @@ inquirer.prompt([
         case 'Update Employee Role':
             updateEmployeeRole()
             break;
-
-        case 'Update Employee Manager':
-            updateEmployeeManager()
-            break;
         
         case 'Exit': 
         process.exit()
@@ -68,29 +65,52 @@ inquirer.prompt([
 
 function viewAllDepartments() {
     matrix.query('SELECT name FROM department', (err, data) =>{
-        console.log(data)
+        console.table(data)
         prompt()
     })
 }
 
 function viewAllRoles() {
     matrix.query('SELECT * FROM role', (err, data) =>{
-        console.log(data)
+        console.table(data)
         prompt()
     })
 }
 
 function viewAllEmployees() {
     matrix.query('SELECT * FROM employee', (err, data) =>{
-        console.log(data)
+        console.table(data)
         prompt()
     })
 }
 
 function viewEmployeeManagers() {
-    matrix.query('SELECT manager_id FROM employee', (err, data) =>{
-        console.log(data)
+    matrix.query('SELECT first_name, last_name, manager_id FROM employee',
+     (err, data) =>{
+         console.table(data)
+        
         prompt()
+    })
+}
+
+function viewEmployeeDepartment() {
+    matrix.query('SELECT name, id FROM department', (err, data) =>{
+        const employeeDepart = data.map((department) =>{
+            return {name: department.name, value: department.id}
+        })
+        inquirer.prompt([{
+            type: 'list',
+            name: 'employeeDepartment',
+            message: 'Which department would you like to see?',
+            choices: employeeDepart
+        }])
+        .then(function (data) {
+            matrix.query("SELECT employee.first_name, employee.last_name FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id WHERE department.id = ?;",
+            data.employeeDepartment, (err, data) => {
+                console.table(data)
+                prompt()
+            })
+        })
     })
 }
 
@@ -148,10 +168,39 @@ function addRoles() {
             choices: deptArray
         }
     ]).then(function (data) {
-        matrix.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?);', [data.titlename, data.salarynumber, data.departmentid, 1])
+        matrix.query('INSERT INTO role (title, salary, department_id) VALUES (?,?,?);', [data.titlename, data.salarynumber, data.departmentid, 1])
         prompt()
     })
     })
 
 }
+  
+function updateEmployeeRole () {
+    //find all employees
+    matrix.query('SELECT * FROM employee', (err, data) =>{
+        console.log(data)
+        inquirer.prompt([{
+            type: 'input',
+            name: 'whichEmployee',
+            message: "What employee's role would you like to update?",
+            
+    }])
+    .then(
+    //which new role do you want to assign
+    matrix.query('SELECT * FROM role', (err, data) =>{
+        console.log(data)
+        inquirer.prompt([{
+            type: 'list',
+            name: 'updateEmRole',
+            message: "which new role do you want to assign?",
+            choices: ''
+        }])
+    })
+)
+
+
+})};
+
+
+
 prompt();

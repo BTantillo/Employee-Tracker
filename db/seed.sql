@@ -4,7 +4,7 @@ VALUES
 ('Sales'),
 ('Finance'),
 ( 'Engineering'),
-( 'Maintenance');
+( 'Maintenance';
 
 /*role data*/
 INSERT INTO role ( title, salary, department_id)
