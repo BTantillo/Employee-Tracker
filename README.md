@@ -6,8 +6,9 @@
 
 ## Built With
 
-<ln>MySQL</ln>*Javascript
-*html
+*MySQL
+*Javascript
+*Html
 *CSS
 *Node
 *Inquirer
