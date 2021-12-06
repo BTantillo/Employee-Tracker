@@ -2,7 +2,7 @@
 
 ## Purpose
 
-*To create a database that tracks employee data that is run through the command line. 
+*To create a database that a business can use to tracks employee data, such as their roles or department they work in, that can be accessed and run through the command line. 
 
 ## Built With
 
