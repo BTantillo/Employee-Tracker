@@ -6,10 +6,13 @@
 
 ## Built With
 
-*SQL
+*MySQL
 *Javascript
 *html
 *CSS
+*Node
+*Inquirer
+*Console Table
 
 
 ## Walkthrough Video
