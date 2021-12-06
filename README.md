@@ -16,9 +16,14 @@
 
 
 ## Walkthrough Video
+ *This link will bring you to a recording of how this program works
 
+ https://watch.screencastify.com/v/cPn1pRKxhso74V4wugxL
 
+## Instructions
 
+To begin the program, 
+*Navigate to the command line and run the command "npm start"
 
 ## Contributions
 
